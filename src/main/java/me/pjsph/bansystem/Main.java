@@ -5,6 +5,7 @@ import me.pjsph.bansystem.cache.Cache;
 import me.pjsph.bansystem.commands.Commands;
 import me.pjsph.bansystem.database.MySQL;
 import me.pjsph.bansystem.infos.PlayerInfos;
+import me.pjsph.bansystem.listeners.PlayerChat;
 import me.pjsph.bansystem.listeners.PlayerJoin;
 import me.pjsph.bansystem.mutes.MuteManager;
 import me.pjsph.bansystem.storage.yml.BanYML;
@@ -43,6 +44,7 @@ public class Main extends JavaPlugin {
 
         banYML = new BanYML(this);
         infosYML = new InfosYML(this);
+        muteYML = new MuteYML(this);
 
         if(configManager.USE_DATABASE)
             initConnection();
@@ -75,6 +77,7 @@ public class Main extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new PlayerJoin(), this);
+        pm.registerEvents(new PlayerChat(), this);
     }
 
     public void initConnection() {

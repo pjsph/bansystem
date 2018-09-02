@@ -23,7 +23,11 @@ public class MuteManager {
 
         if(Bukkit.getPlayer(uuid) != null) {
             Player target = Bukkit.getPlayer(uuid);
-            target.sendMessage("§cYou have been muted for §e" + getTimeLeft(uuid));
+            if(end == -1) {
+                target.sendMessage("§cYou have been permanently muted");
+            } else {
+                target.sendMessage("§cYou have been muted for §e" + getTimeLeft(uuid));
+            }
         }
     }
 
@@ -90,7 +94,7 @@ public class MuteManager {
             timeLeft -= TimeUnit.SECONDE.getToSecond();
         }
 
-        return months + " " + TimeUnit.MOIS.getName() + ", " + days + " " + TimeUnit.JOUR.getName() + ", " + hours + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + seconds + " " + TimeUnit.SECONDE.getName();
+        return ((months > 0) ? (months + " " + TimeUnit.MOIS.getName() + ", ") : "") + ((days > 0) ? (days + " " + TimeUnit.JOUR.getName() + ", ") : "") + ((hours > 0) ? (hours + " " + TimeUnit.HEURE.getName() + ", ") : "") + ((minutes > 0) ? (minutes + " " + TimeUnit.MINUTE.getName() + ", ") : "") + ((seconds > 0) ? (seconds + " " + TimeUnit.SECONDE.getName()) : "");
     }
 
 }

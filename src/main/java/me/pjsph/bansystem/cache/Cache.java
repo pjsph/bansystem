@@ -51,7 +51,6 @@ public class Cache {
 
                             banned.put(uuid, map);
                         }
-                        console.sendMessage(Main.getInstance().prefix + "§aCached!");
                     } catch(SQLException e) {
                         e.printStackTrace();
                     }
@@ -69,7 +68,6 @@ public class Cache {
 
                             player_infos.put(playerName, uuid);
                         }
-                        console.sendMessage(Main.getInstance().prefix + "§aCached!");
                     } catch(SQLException e) {
                         e.printStackTrace();
                     }
@@ -87,11 +85,11 @@ public class Cache {
 
                             muted.put(uuid, Long.valueOf(end));
                         }
-                        console.sendMessage(Main.getInstance().prefix + "§aCached!");
                     } catch(SQLException e) {
                         e.printStackTrace();
                     }
                 });
+                console.sendMessage(Main.getInstance().prefix + "§aCached!");
 
             //STOP
             } else {

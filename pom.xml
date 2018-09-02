@@ -6,7 +6,7 @@
 
     <groupId>me.pjsph.bansystem</groupId>
     <artifactId>BanSystem</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
 
     <build>
         <plugins>
