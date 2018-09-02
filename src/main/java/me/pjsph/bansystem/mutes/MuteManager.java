@@ -1,4 +1,4 @@
-package me.pjsph.bansystem.bans;
+package me.pjsph.bansystem.mutes;
 
 import me.pjsph.bansystem.Main;
 import me.pjsph.bansystem.utils.TimeUnit;
@@ -7,58 +7,54 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BanManager {
+public class MuteManager {
 
-    public static final String TABLE = "bans";
+    public static final String TABLE = "mutes";
 
-    public void ban(UUID uuid, long endInSeconds, String reason) {
-        if(Main.getInstance().cache.isBanned(uuid)) return;
+    public void mute(UUID uuid, long endInSeconds) {
+        if(Main.getInstance().cache.isMuted(uuid)) return;
 
         long endToMillis = endInSeconds * 1000;
         long end = endToMillis + System.currentTimeMillis();
 
         if(endInSeconds == -1) end = -1;
 
-        Main.getInstance().cache.ban(uuid, end, reason);
+        Main.getInstance().cache.mute(uuid, end);
 
         if(Bukkit.getPlayer(uuid) != null) {
             Player target = Bukkit.getPlayer(uuid);
-            target.kickPlayer("§cYou are banned from this server !\n " +
-                                    "\n " +
-                                    "§6Reason : §f" + reason + "\n " +
-                                    "\n " +
-                                    "§aTime left : §f" + getTimeLeft(uuid));
+            target.sendMessage("§cYou have been muted for §e" + getTimeLeft(uuid));
         }
     }
 
-    public void unban(UUID uuid) {
-        if(!Main.getInstance().cache.isBanned(uuid)) return;
+    public void unmute(UUID uuid) {
+        if(!Main.getInstance().cache.isMuted(uuid)) return;
 
-        Main.getInstance().cache.unban(uuid);
+        Main.getInstance().cache.unmute(uuid);
     }
 
-    public boolean isBanned(UUID uuid) {
-        return Main.getInstance().cache.isBanned(uuid);
+    public boolean isMuted(UUID uuid) {
+        return Main.getInstance().cache.isMuted(uuid);
     }
 
     public void checkDuration(UUID uuid) {
-        if(!Main.getInstance().cache.isBanned(uuid)) return;
+        if(!Main.getInstance().cache.isMuted(uuid)) return;
 
         if(getEnd(uuid) == -1) return;
 
         if(getEnd(uuid) < System.currentTimeMillis()) {
-            unban(uuid);
+            unmute(uuid);
         }
     }
 
     public long getEnd(UUID uuid) {
-        if(!Main.getInstance().cache.isBanned(uuid)) return 0;
+        if(!Main.getInstance().cache.isMuted(uuid)) return 0;
 
-        return Main.getInstance().cache.getBanEnd(uuid);
+        return Main.getInstance().cache.getMuteEnd(uuid);
     }
 
     public String getTimeLeft(UUID uuid) {
-        if(!Main.getInstance().cache.isBanned(uuid)) return "§cNot banned";
+        if(!Main.getInstance().cache.isMuted(uuid)) return "§cNot muted";
 
         if(getEnd(uuid) == -1) return "§cPermanent";
 
@@ -95,12 +91,6 @@ public class BanManager {
         }
 
         return months + " " + TimeUnit.MOIS.getName() + ", " + days + " " + TimeUnit.JOUR.getName() + ", " + hours + " " + TimeUnit.HEURE.getName() + ", " + minutes + " " + TimeUnit.MINUTE.getName() + ", " + seconds + " " + TimeUnit.SECONDE.getName();
-    }
-
-    public String getReason(UUID uuid) {
-        if(!Main.getInstance().cache.isBanned(uuid)) return "§cNot banned";
-
-        return Main.getInstance().cache.getBanReason(uuid);
     }
 
 }

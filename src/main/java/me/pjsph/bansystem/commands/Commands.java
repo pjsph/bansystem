@@ -85,7 +85,7 @@ public class Commands implements CommandExecutor {
             }
 
             if(args.length != 1) {
-                sender.sendMessage("§c/unban <joueur>");
+                sender.sendMessage("§c/unban <player>");
                 return true;
             }
 
@@ -105,7 +105,103 @@ public class Commands implements CommandExecutor {
 
             Main.getInstance().banManager.unban(uuid);
             sender.sendMessage("§aYou unbanned §6" + Bukkit.getOfflinePlayer(uuid).getName());
-            return false;
+            return true;
+        }
+
+        if(label.equalsIgnoreCase("mute")) {
+            if(!sender.hasPermission("mute")) {
+                return true;
+            }
+
+            if(args.length < 2) {
+                sender.sendMessage("§6--------------------");
+                sender.sendMessage("§c/mute <player> perm");
+                sender.sendMessage("§c/mute <player> <duration>:<time unit>");
+                sender.sendMessage("§6--------------------");
+                return true;
+            }
+
+            String targetName = args[0];
+
+            if(!Main.getInstance().playerInfos.exist(targetName)) {
+                sender.sendMessage("§cThis player is never came on this server.");
+                return true;
+            }
+
+            UUID uuid = Main.getInstance().playerInfos.getUuid(targetName);
+
+            if(Main.getInstance().muteManager.isMuted(uuid)) {
+                sender.sendMessage("§cThis player is already muted!");
+                return true;
+            }
+
+            if(args[1].equalsIgnoreCase("perm")) {
+                Main.getInstance().muteManager.mute(uuid, -1);
+                sender.sendMessage("§cYou muted §6" + Bukkit.getOfflinePlayer(uuid).getName() + " §c(Permanent)");
+                return true;
+            }
+
+            if(!args[1].contains(":")) {
+                sender.sendMessage("§6--------------------");
+                sender.sendMessage("§c/mute <player> perm");
+                sender.sendMessage("§c/mute <player> <duration>:<time unit>");
+                sender.sendMessage("§6--------------------");
+                return true;
+            }
+
+            int duration = 0;
+            try {
+                duration = Integer.parseInt(args[1].split(":")[0]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage("§cValue 'duration' must be a number.");
+                return true;
+            }
+
+            if(!TimeUnit.existFromShortcut(args[1].split(":")[1])) {
+                sender.sendMessage("§cThis time unit doesn't exist.");
+                sender.sendMessage("§6--------------------");
+                for(TimeUnit units : TimeUnit.values()) {
+                    sender.sendMessage("§c" + units.getName() + "§7: " + units.getShortcut());
+                }
+                sender.sendMessage("§6--------------------");
+                return true;
+            }
+
+            TimeUnit unit = TimeUnit.getFromShortcut(args[1].split(":")[1]);
+            long muteTime = unit.getToSecond() * duration;
+
+            Main.getInstance().muteManager.mute(uuid, muteTime);
+            sender.sendMessage("§cYou muted §6" + Bukkit.getOfflinePlayer(uuid).getName() + " §c(" + duration + " " + unit.getName() + ")");
+            return true;
+        }
+
+        if(label.equalsIgnoreCase("unmute")) {
+            if(!sender.hasPermission("unmute")) {
+                return true;
+            }
+
+            if(args.length != 1) {
+                sender.sendMessage("§c/unmute <player>");
+                return true;
+            }
+
+            String targetName = args[0];
+
+            if(!Main.getInstance().playerInfos.exist(targetName)) {
+                sender.sendMessage("§cThis player is never came on this server.");
+                return true;
+            }
+
+            UUID uuid = Main.getInstance().playerInfos.getUuid(targetName);
+
+            if(!Main.getInstance().muteManager.isMuted(uuid)) {
+                sender.sendMessage("§cThis player isn't muted!");
+                return true;
+            }
+
+            Main.getInstance().muteManager.unmute(uuid);
+            sender.sendMessage("§aYou unmuted §6" + Bukkit.getOfflinePlayer(uuid).getName());
+            return true;
         }
 
         if(label.equalsIgnoreCase("bansystem")) {

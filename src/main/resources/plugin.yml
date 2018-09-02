@@ -7,5 +7,9 @@ commands:
     description: Ban a player
   unban:
     description: Unban a player
+  mute:
+    description: Mute a player
+  unmute:
+    description: Unmute a player
   bansystem:
     description: Basic plugin commands

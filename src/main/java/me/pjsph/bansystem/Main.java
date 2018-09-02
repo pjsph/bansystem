@@ -6,9 +6,11 @@ import me.pjsph.bansystem.commands.Commands;
 import me.pjsph.bansystem.database.MySQL;
 import me.pjsph.bansystem.infos.PlayerInfos;
 import me.pjsph.bansystem.listeners.PlayerJoin;
+import me.pjsph.bansystem.mutes.MuteManager;
 import me.pjsph.bansystem.storage.yml.BanYML;
 import me.pjsph.bansystem.storage.yml.DefaultConfigManager;
 import me.pjsph.bansystem.storage.yml.InfosYML;
+import me.pjsph.bansystem.storage.yml.MuteYML;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -22,11 +24,13 @@ public class Main extends JavaPlugin {
     private BasicDataSource connectionPool;
     private MySQL mysql;
     public BanManager banManager = new BanManager();
+    public MuteManager muteManager = new MuteManager();
     public PlayerInfos playerInfos = new PlayerInfos();
     public Cache cache = new Cache();
     public DefaultConfigManager configManager;
     public BanYML banYML;
     public InfosYML infosYML;
+    public MuteYML muteYML;
 
     public final String prefix = "§c[BanSystem]§r ";
 
@@ -62,6 +66,8 @@ public class Main extends JavaPlugin {
     private void registerCommands() {
         getCommand("ban").setExecutor(new Commands());
         getCommand("unban").setExecutor(new Commands());
+        getCommand("mute").setExecutor(new Commands());
+        getCommand("unmute").setExecutor(new Commands());
         getCommand("bansystem").setExecutor(new Commands());
     }
 

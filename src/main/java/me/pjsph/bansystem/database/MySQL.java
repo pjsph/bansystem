@@ -34,6 +34,12 @@ public class MySQL {
                 "`#` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                 "player_uuid VARCHAR(255), " +
                 "player_name VARCHAR(255))");
+
+        //MUTES
+        update("CREATE TABLE IF NOT EXISTS mutes (" +
+                "`#` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                "player_uuid VARCHAR(255), " +
+                "end BIGINT)");
     }
 
     public void update(String qry) {
