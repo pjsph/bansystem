@@ -1,7 +1,7 @@
 # BanSystem
 A ban system spigot plugin
 
-Current version: 1.4
+Current version: 1.5
 
 This plugin is [available on Spigotmc](https://www.spigotmc.org/resources/bansystem.60483/).
 

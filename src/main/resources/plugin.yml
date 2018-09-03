@@ -1,5 +1,5 @@
 name: BanSystem
-version: 1.4
+version: 1.5
 main: me.pjsph.bansystem.Main
 author: pjsph
 commands:
